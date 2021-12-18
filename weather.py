@@ -1,11 +1,20 @@
 import requests
 
-def print_weather(weather_response, units):
+def print_weather(weather, units):
   """
   Print the given weather information
   adding given units after temperature values
   """
-  pass
+  # Extract info from the response dictionary
+  temp_day = weather['temp_day']
+  temp_min = weather['temp_min']
+  temp_max = weather['temp_max']
+  feels_like = weather['feels_like']
+  description = weather['description']
+  
+  print(f"Description: {description}")
+  print(f"Temperature: {temp_day}{units} ({temp_min}{units} to {temp_max}{units}")
+  print(f"Feels like: {feels_like}{units}")
 
 def get_weather_data(units, day_number):
   """
@@ -52,7 +61,19 @@ def main():
   """
   units = "metric"
   day_number = 0 # Represents today
+
+  degree_symbol = u"\N{DEGREE SIGN}"
+  units_to_symbol = {
+    "imperial": degree_symbol + 'F',
+    "metric": degree_symbol + 'C'
+  }
+
+  units_symbol = units_to_symbol[units]
   weather_response = get_weather_data(units, day_number)
-  print_weather(weather_response, units)
+
+  if weather_response:
+    print_weather(weather_response, units_symbol)
+  else:
+    print("Sorry couldn't get weather information at this time")
 
 if __name__ == "__main__": main()
